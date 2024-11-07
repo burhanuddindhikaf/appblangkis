@@ -5,7 +5,9 @@ import 'halaman_dashboard.dart';
 
 class HalamanEditProfile extends StatefulWidget {
   final SharedPreferences spInstance;
-  const HalamanEditProfile(this.spInstance, {super.key});
+  final String currentUsername;
+
+  const HalamanEditProfile(this.spInstance, this.currentUsername, {super.key});
 
   @override
   State<StatefulWidget> createState() => _HalamanEditProfileState();
@@ -23,7 +25,8 @@ class _HalamanEditProfileState extends State<HalamanEditProfile> {
   void initState() {
     super.initState();
     String? imitasiTabelUserSp = widget.spInstance.getString("user");
-    imitasiTabelUser = imitasiTabelUserSp == null ? {} : json.decode(imitasiTabelUserSp);
+    imitasiTabelUser =
+        imitasiTabelUserSp == null ? {} : json.decode(imitasiTabelUserSp);
   }
 
   void validasiUsername(String value) {
@@ -115,12 +118,12 @@ class _HalamanEditProfileState extends State<HalamanEditProfile> {
                     ),
                     const SizedBox(width: 20),
                     Text(
-                      "Kembali",
+                      widget.currentUsername,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
                           ?.apply(color: Theme.of(context).colorScheme.primary),
-                    )
+                    ),
                   ]),
                 ),
                 const SizedBox(height: 14),
@@ -176,23 +179,23 @@ class _HalamanEditProfileState extends State<HalamanEditProfile> {
                                 konfirmasiPasswordError == null)
                             ? () async {
                                 // Menambahkan username dan password ke imitasiTabelUser
-                                imitasiTabelUser[usernameController.text] = passwordController.text;
+                                imitasiTabelUser[usernameController.text] =
+                                    passwordController.text;
 
                                 // Menyimpan imitasiTabelUser ke SharedPreferences dalam bentuk JSON
                                 await widget.spInstance.setString(
                                     "user", json.encode(imitasiTabelUser));
 
                                 // Memperbarui tampilan dengan setState
-                                
+
                                 // Kembali ke halaman sebelumnya
                                 if (!context.mounted) return;
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => HalamanDashboard(
-                                      widget.spInstance
-                                      ,usernameController.text
-                                    ),
+                                        widget.spInstance,
+                                        usernameController.text),
                                   ),
                                 );
                               }

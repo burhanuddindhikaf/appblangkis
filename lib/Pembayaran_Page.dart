@@ -6,7 +6,7 @@ import 'nota_page.dart'; // Impor NotaPage
 class PembayaranPage extends StatefulWidget {
   final int totalKeseluruhan; // Total transaksi
 
-  PembayaranPage({super.key, required this.totalKeseluruhan});
+  const PembayaranPage({super.key, required this.totalKeseluruhan});
 
   @override
   State<StatefulWidget> createState() => _PembayaranPageState();
@@ -19,7 +19,6 @@ class _PembayaranPageState extends State<PembayaranPage> {
   void cetakNota() {
     int jmlBayar = int.tryParse(jmlBayarCtrl.text) ?? 0;
     kembali = jmlBayar - widget.totalKeseluruhan; // Hitung sisa kembali
-
 
     // Navigasi ke NotaPage dengan detail pembayaran
     Navigator.push(

@@ -5,6 +5,7 @@ import 'halaman_item.dart';
 import 'halaman_edit_profile.dart';
 import 'about_us.dart';
 import 'pesan_page.dart';
+import 'halaman_login.dart';
 
 class HalamanDashboard extends StatefulWidget {
   final SharedPreferences spInstance;
@@ -13,12 +14,12 @@ class HalamanDashboard extends StatefulWidget {
   const HalamanDashboard(this.spInstance, this.currentUsername, {super.key});
 
   @override
-  State<StatefulWidget> createState() => _HalamanMenuState(); 
+  State<StatefulWidget> createState() => _HalamanMenuState();
 }
 
-class _HalamanMenuState extends State<HalamanDashboard> { 
-  int hargaAkhir = 0; 
-  ItemMenu? selectedItem; 
+class _HalamanMenuState extends State<HalamanDashboard> {
+  int hargaAkhir = 0;
+  ItemMenu? selectedItem;
   Map<ItemMenu, int> selectedItems = {};
   void addItem(ItemMenu item) {
     setState(() {
@@ -30,13 +31,12 @@ class _HalamanMenuState extends State<HalamanDashboard> {
     });
   }
 
-
-  @override 
-  Widget build(BuildContext context) { 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 16,left: 8, right: 8, bottom: 8),
+          padding: const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 8),
           child: Center(
             child: Container(
               child: Column(
@@ -64,6 +64,10 @@ class _HalamanMenuState extends State<HalamanDashboard> {
                                 value: "update_user_password",
                                 child: Text("Update User & Password"),
                               ),
+                              PopupMenuItem<String>(
+                                value: "logout",
+                                child: Text("logout"),
+                              ),
                             ];
                           },
                           onSelected: (String value) {
@@ -80,13 +84,26 @@ class _HalamanMenuState extends State<HalamanDashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HalamanEditProfile(widget.spInstance),
+                                    builder: (context) => HalamanEditProfile(
+                                        widget.spInstance,
+                                        widget.currentUsername),
+                                  ),
+                                );
+                                break;
+                              case "logout":
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        HalamanLogin(widget.spInstance),
                                   ),
                                 );
                                 break;
                               default:
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Menu belum diimplementasikan')),
+                                  SnackBar(
+                                      content:
+                                          Text('Menu belum diimplementasikan')),
                                 );
                             }
                           },
@@ -100,72 +117,81 @@ class _HalamanMenuState extends State<HalamanDashboard> {
                     mainAxisSpacing: 7,
                     crossAxisSpacing: 7,
                     crossAxisCount: 2,
-                    children: menuImitasi.map(
-                      (item) => Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap: () { 
-                                setState(() {
-                                  hargaAkhir += item.harga; 
-                                });
-                                addItem(item); 
-                              }, 
-                              child: Container(
-                                height: 100, 
-                                child: Image.asset(
-                                  item.linkGambar,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (route) => HalamanItem(item),
+                    children: menuImitasi
+                        .map(
+                          (item) => Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      hargaAkhir += item.harga;
+                                    });
+                                    addItem(item);
+                                  },
+                                  child: SizedBox(
+                                    height: 100,
+                                    child: Image.asset(
+                                      item.linkGambar,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                );
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(item.nama),
-                                  Text(item.harga.toString()),
-                                ],
-                              ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (route) => HalamanItem(item),
+                                      ),
+                                    );
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item.nama),
+                                      Text(item.harga.toString()),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ).toList(),
+                          ),
+                        )
+                        .toList(),
                   ),
                   // Ganti Positioned dengan Container untuk tetap di bawah
                   Container(
-                    margin: const EdgeInsets.only(top: 10), // Menambahkan margin atas
+                    margin: const EdgeInsets.only(
+                        top: 10), // Menambahkan margin atas
                     color: Theme.of(context).colorScheme.primaryContainer,
                     child: InkWell(
                       onTap: () {
-                        if (selectedItems.isNotEmpty) { // Pastikan ada item yang dipilih
+                        if (selectedItems.isNotEmpty) {
+                          // Pastikan ada item yang dipilih
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PesanPage(pesananItems: selectedItems),
+                              builder: (context) =>
+                                  PesanPage(pesananItems: selectedItems),
                             ),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Silakan pilih item terlebih dahulu')),
+                            SnackBar(
+                                content:
+                                    Text('Silakan pilih item terlebih dahulu')),
                           );
                         }
                       },
-                      child: Text("Total: Rp.$hargaAkhir",
-                          textAlign: TextAlign.center,
-                        ),
+                      child: Text(
+                        "Total: Rp.$hargaAkhir",
+                        textAlign: TextAlign.center,
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
@@ -173,5 +199,5 @@ class _HalamanMenuState extends State<HalamanDashboard> {
         ),
       ),
     );
-  } 
+  }
 }

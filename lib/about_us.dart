@@ -6,9 +6,29 @@ class AboutUsPage extends StatelessWidget {
 
   // Fungsi untuk membuka URL
   void _launchURL() async {
-    final Uri url = Uri.parse('https://burhanuddindhikaf.github.io/leafletmap/');
+    final Uri url =
+        Uri.parse('https://burhanuddindhikaf.github.io/leafletmap/');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw 'Tidak dapat membuka $url';
+    }
+  }
+
+  Future<void> kirimSms() async {
+    Uri uri = Uri(
+      scheme: 'sms',
+      path: "089526869497",
+    );
+
+    if (!await launchUrl(uri)) {
+      throw Exception("Gagal membuka aplikasi SMS!");
+    }
+  }
+
+  Future<void> telepon() async {
+    Uri uri = Uri(scheme: "tel", path: "089526869497");
+
+    if (!await launchUrl(uri)) {
+      throw Exception("Gagal membuka link!");
     }
   }
 
@@ -24,18 +44,18 @@ class AboutUsPage extends StatelessWidget {
           children: [
             ListTile(
               title: const Text('Call Center Penjual'),
-              subtitle: const Text('Hubungi kami di: 0800-123-4567'),
+              subtitle: const Text('Hubungi kami di: 0895-2686-9497'),
               trailing: const Icon(Icons.phone),
               onTap: () {
-                // Tindakan untuk menghubungi call center
+                telepon();
               },
             ),
             ListTile(
               title: const Text('SMS ke Penjual'),
-              subtitle: const Text('Kirim SMS ke: 0812-3456-7890'),
+              subtitle: const Text('Kirim SMS ke: 0895-2686-9497'),
               trailing: const Icon(Icons.message),
               onTap: () {
-                // Tindakan untuk mengirim SMS
+                kirimSms();
               },
             ),
             ListTile(

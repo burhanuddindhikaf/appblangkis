@@ -8,7 +8,11 @@ class NotaPage extends StatelessWidget {
   final int jumlah;
   final int kembali; // Menyimpan jumlah kembali
 
-  NotaPage({super.key, required this.harga, required this.jumlah, required this.kembali});
+  const NotaPage(
+      {super.key,
+      required this.harga,
+      required this.jumlah,
+      required this.kembali});
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +47,16 @@ class NotaPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 // Ambil instance SharedPreferences
-                SharedPreferences spInstance = await SharedPreferences.getInstance();
-                String? currentUsername = spInstance.getString("currentUsername"); // Ganti dengan kunci yang sesuai
+                SharedPreferences spInstance =
+                    await SharedPreferences.getInstance();
+                String? currentUsername = spInstance.getString(
+                    "currentUsername"); // Ganti dengan kunci yang sesuai
 
                 // Navigasi ke HalamanDashboard dengan username
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => HalamanDashboard(spInstance, currentUsername ?? ''),
+                    builder: (context) =>
+                        HalamanDashboard(spInstance, currentUsername ?? ''),
                   ),
                   (Route<dynamic> route) => false,
                 );
